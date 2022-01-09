@@ -12,12 +12,12 @@ const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(DATABASE_URL, SUPABASE_SERVICE_API_KEY);
 
 export const handler: Handler = async (event) => {
-    const { title, description, link } = JSON.parse(event.body);
+    const { title, description, link, author } = JSON.parse(event.body);
 
     const { data, error } = await supabase
         .from('Article')
         .insert([
-            { title, description, url: link },
+            { title, description, url: link, author },
         ]);
     
     if (error) {
