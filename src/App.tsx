@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
@@ -6,6 +6,14 @@ function App() {
   const [description, setDescription] = useState('');
   const [link, setLink] = useState('');
   const [response, setResponse] = useState();
+  const [articles, setArticles] = useState<any>(null);
+
+  useEffect(async () => {
+    const response = await fetch('/.netlify/functions/article-read');
+    const data = await response.json();
+    
+    setArticles(data);
+  }, []);
 
   async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -14,7 +22,7 @@ function App() {
       return;
     }
 
-    const res = await fetch('/.netlify/functions/promotion', {
+    const res = await fetch('/.netlify/functions/article-create', {
       method: 'POST',
       body: JSON.stringify({ title, description, link }),
     }).then((res) => res.json());
@@ -31,6 +39,15 @@ function App() {
         <pre>{JSON.stringify(response, null, 2)}</pre>
       </header>
       <main>
+        <div>
+          {articles?.map(article => 
+            <div key={article.id}>
+              <span>{`Title: ${article.title} `}</span>
+              <span>{`Description: ${article.description} `}</span>
+              <span>{`Url: ${article.url}`}</span>
+            </div>
+          )}
+        </div>
         <form onSubmit={handleSubmit}>
           <label>Title</label>
           <input type="text" onChange={e => setTitle(e.target.value)} value={title}/>

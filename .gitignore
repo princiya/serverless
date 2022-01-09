@@ -4,3 +4,11 @@ dist
 dist-ssr
 *.local
 .netlify/
+
+.env
+.env.dev
+
+# Supabase
+**/supabase/.branches
+**/supabase/.temp
+**/supabase/.env
