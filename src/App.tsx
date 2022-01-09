@@ -8,11 +8,16 @@ function App() {
   const [response, setResponse] = useState();
   const [articles, setArticles] = useState<any>(null);
 
-  useEffect(async () => {
-    const response = await fetch('/.netlify/functions/article-read');
-    const data = await response.json();
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch('/.netlify/functions/article-read');
+      const data = await response.json();
     
-    setArticles(data);
+      setArticles(data);
+    };
+
+    fetchData();
+    
   }, []);
 
   async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
@@ -40,7 +45,7 @@ function App() {
       </header>
       <main>
         <div>
-          {articles?.map(article => 
+          {articles?.map((article:any) => 
             <div key={article.id}>
               <span>{`Title: ${article.title} `}</span>
               <span>{`Description: ${article.description} `}</span>
